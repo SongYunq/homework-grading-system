@@ -18,7 +18,7 @@ mise exec -- dotnet --version
 
 愿意使用 mise 的开发者可以复用同一套版本配置。未使用 mise 的开发者，可以在确定项目版本后，按 [Microsoft 的 .NET 安装指南](https://learn.microsoft.com/en-us/dotnet/core/install/) 选择适合操作系统和 CPU 架构的 SDK。进入仓库根目录，用 `dotnet --list-sdks` 查看可用版本，再用 `dotnet --version` 检查实际选中版本。Windows、Linux 和其他 macOS 机器的可用性，需要用实际应用与依赖验证。
 
-如果对方只需要运行项目，参见 [发布与交付](../release/README.md)；运行发布包不应依赖开发者本机的 mise 配置。
+如果对方只需要运行项目，参见 [发布与交付](../08-release.md)；运行发布包不应依赖开发者本机的 mise 配置。
 
 ## 项目初始化后补充
 

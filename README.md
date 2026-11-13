@@ -12,6 +12,6 @@
 
 项目处于文档筹备阶段，尚未开始正式开发。需求、技术方案和支持平台待讨论。
 
-从 [项目文档索引](docs/README.md) 查看文档分工和维护方式；准备开发环境请看 [开发环境指南](docs/development/setup.md)。
+从 [项目文档索引](docs/01-index.md) 查看文档分工和维护方式；准备开发环境请看 [开发环境指南](docs/06-development/01-setup.md)。
 
 原始项目说明：[作业批改-2026.pdf](docs/courseware/作业批改-2026.pdf)。
