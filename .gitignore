@@ -1,1 +1,10 @@
 .DS_Store
+**/bin/
+**/obj/
+**/App_Data/
+*.user
+.env
+.env.*
+__pycache__/
+TestResults/
+/artifacts/

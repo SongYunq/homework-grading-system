@@ -1,27 +1,33 @@
 # 开发环境
 
-当前仓库还没有 .NET 解决方案、应用入口或项目级 SDK 版本配置。以下步骤用于检查已有环境；实际构建、启动和测试命令在项目初始化后补齐。
+后端目标为 .NET 8。仓库的 `mise.toml` 选择 .NET 8，`global.json` 限定使用稳定的 8.0 SDK，并允许采用已安装的更新功能带。当前方案沿用本机的 mise 安装。
 
-## 本机优先使用 mise
+## 构建与启动
 
-已在 macOS ARM64 上验证，现有 mise 环境通过 `mise exec -- dotnet --version` 选中 `8.0.428`。这是本机当前可用的 SDK，不是项目版本要求。进入仓库根目录后检查：
+在仓库根目录运行：
 
 ```sh
-mise --version
-mise exec -- dotnet --list-sdks
 mise exec -- dotnet --version
+mise exec -- dotnet restore HomeworkGrading.sln
+mise exec -- dotnet build HomeworkGrading.sln --no-restore
+mise exec -- dotnet run --no-build --project src/HomeworkGrading.Api
 ```
 
-如果检查结果与预期不同，用 `mise which dotnet` 查看执行位置，用 `mise exec -- dotnet --info` 查看实际使用的 SDK 和架构。日常开发优先复用已有安装。项目 SDK 确定后，再考虑由 `global.json` 统一声明版本和兼容策略，并让 mise 与直接使用 `dotnet` 的开发环境遵循同一要求。mise 的共享安装可能包含多个 SDK，最终以 `dotnet --version` 的输出为准。
+首次恢复包时需要访问 NuGet。若 mise 提示信任项目配置，审阅 `mise.toml` 后运行 `mise trust`。用 `mise which dotnet` 或 `mise exec -- dotnet --info` 检查 SDK 来源。安装其他机器所需工具时，可参考 [mise 的 .NET 指南](https://mise.jdx.dev/lang/dotnet.html)和[微软 .NET 安装指南](https://learn.microsoft.com/en-us/dotnet/core/install/)。
 
-## 其他开发机器
+默认开发启动地址为 `http://localhost:5080`。在浏览器打开 `/swagger` 查看和试用 API，通过 `/health` 检查服务是否启动。前端调用方式见 [API 手册](../04-api.md)，验证步骤见[测试与验证](../07-testing.md)。
 
-愿意使用 mise 的开发者可以复用同一套版本配置。未使用 mise 的开发者，可以在确定项目版本后，按 [Microsoft 的 .NET 安装指南](https://learn.microsoft.com/en-us/dotnet/core/install/) 选择适合操作系统和 CPU 架构的 SDK。进入仓库根目录，用 `dotnet --list-sdks` 查看可用版本，再用 `dotnet --version` 检查实际选中版本。Windows、Linux 和其他 macOS 机器的可用性，需要用实际应用与依赖验证。
+## 本地数据与可选配置
 
-如果对方只需要运行项目，参见 [发布与交付](../08-release.md)；运行发布包不应依赖开发者本机的 mise 配置。
+启动时应用数据库迁移。数据库默认位于 `src/HomeworkGrading.Api/App_Data/homework.db`，Cookie 保护密钥默认位于同目录下的 `keys/`。开发启动配置会在新建空库时写入示例数据；账号及操作见[使用手册](../09-usage.md)。
 
-## 项目初始化后补充
+| 配置 | 用途 |
+| --- | --- |
+| `Storage__DataDirectory` | 覆盖数据库与会话密钥的默认目录。相对路径以应用内容根目录为准。 |
+| `ConnectionStrings__Homework` | 覆盖 SQLite 连接字符串，例如 `Data Source=/tmp/homework-smoke.db`。运行集成脚本时使用独立文件。 |
+| `DemoData__Enabled` | 是否初始化演示数据。仅在 `Development` 环境生效；默认启动配置设为 `true`。 |
+| `Bootstrap__TeacherEmail`、`Bootstrap__TeacherPassword` | 建立首个正式教师账号。两项一起提供，优先于演示初始化。已有教师时不新增账号。 |
+| `Grading__Endpoint`、`Grading__Model`、`Grading__TimeoutSeconds` | 覆盖模型请求地址、模型和超时配置。默认值见 `src/HomeworkGrading.Api/appsettings.json`。 |
+| `Grading__ApiKey` | 启用模型调用所需密钥。可通过环境变量或开发环境的 .NET User Secrets 配置。 |
 
-记录项目要求的 SDK 和目标框架、外部依赖、必要配置及示例，以及从干净检出到构建、启动、测试的可执行步骤。验证时记录操作系统、架构、实际选中的 SDK 和结果。
-
-参考：[mise 的 .NET 指南](https://mise.jdx.dev/lang/dotnet.html)、[Microsoft 的 `global.json` 说明](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json)。
+正式运行所需配置见[发布与交付](../08-release.md)。
