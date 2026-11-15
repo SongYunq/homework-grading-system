@@ -17,6 +17,18 @@ mise exec -- dotnet run --no-build --project src/HomeworkGrading.Api
 
 默认开发启动地址为 `http://localhost:5080`。在浏览器打开 `/swagger` 查看和试用 API，通过 `/health` 检查服务是否启动。前端调用方式见 [API 手册](../04-api.md)，验证步骤见[测试与验证](../07-testing.md)。
 
+## 启动前端样式预览
+
+前端位于 `src/HomeworkGrading.Web`，使用 React 与 TDesign。需要 Node.js 20.19+（20.x）或 22.12+。从仓库根目录运行：
+
+```sh
+cd src/HomeworkGrading.Web
+npm ci
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+
+打开 `http://127.0.0.1:5173/`；使用 `Ctrl+C` 停止。执行 `npm run build` 可检查类型并构建。当前预览无需启动后端，操作入口见[使用手册](../09-usage.md#前端样式预览)。
+
 ## 本地数据与可选配置
 
 启动时应用数据库迁移。数据库默认位于 `src/HomeworkGrading.Api/App_Data/homework.db`，Cookie 保护密钥默认位于同目录下的 `keys/`。开发启动配置会在新建空库时写入示例数据；账号及操作见[使用手册](../09-usage.md)。
